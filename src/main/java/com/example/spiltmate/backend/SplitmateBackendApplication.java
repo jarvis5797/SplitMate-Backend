@@ -8,7 +8,6 @@ public class SplitmateBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SplitmateBackendApplication.class, args);
-		System.out.println("Hello");
 	}
 
 }
