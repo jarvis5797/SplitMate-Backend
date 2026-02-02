@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleException(Exception ex, WebRequest request){
 		
 		ErrorResponse response = errorResponseBuilder(ex, request);
@@ -29,7 +30,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(InvalidTokenException.class)
-	public ResponseEntity<ErrorResponse> hadnleInvalidToken(InvalidTokenException ex, WebRequest request){
+	public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex, WebRequest request){
 		
 		ErrorResponse response = errorResponseBuilder(ex, request);
 		response.setErrorCode("UNAUTHORIZED");
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 	
+	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request){
 		
 		ErrorResponse response = errorResponseBuilder(ex, request);
@@ -44,6 +46,15 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
 	}
+	
+	public ResponseEntity<ErrorResponse> handleInvalidAuthentication(AuthenticationException ex , WebRequest request){
+		
+		ErrorResponse response = errorResponseBuilder(ex, request);
+		response.setErrorCode("INVALID_USERNAME_OR_PASSWORD");
+		
+		return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+	}
+	
 	
 	private ErrorResponse errorResponseBuilder(Exception ex, WebRequest request) {
 		
