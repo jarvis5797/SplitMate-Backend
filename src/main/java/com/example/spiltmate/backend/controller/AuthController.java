@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spiltmate.backend.dto.CreateUserRequest;
+import com.example.spiltmate.backend.dto.LoginRequest;
 import com.example.spiltmate.backend.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class AuthController {
 	@PostMapping("/signUp")
 	public ResponseEntity<?> signUp (@RequestBody CreateUserRequest request) throws Exception {
 		return new ResponseEntity<>(authService.addUser(request), HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/signIn")
+	public ResponseEntity<?> signIn(@RequestBody LoginRequest request){
+		return new ResponseEntity<>(authService.signIn(request), HttpStatus.ACCEPTED);
 	}
 
 }

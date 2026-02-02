@@ -43,5 +43,5 @@ public class User {
 	private LocalDateTime createdAt;
 	
 	@UpdateTimestamp
-	private LocalDateTime updatesAt;
+	private LocalDateTime updatedAt;
 }
