@@ -1,10 +1,12 @@
 package com.example.spiltmate.backend.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.spiltmate.backend.dto.CreateUserRequest;
 import com.example.spiltmate.backend.dto.LoginRequest;
+import com.example.spiltmate.backend.dto.Response;
 import com.example.spiltmate.backend.dto.UserResponse;
 import com.example.spiltmate.backend.entity.User;
 import com.example.spiltmate.backend.exception.AuthenticationException;
@@ -25,7 +27,7 @@ public class AuthService {
 	
 	private final JwtUtil jwtUtil;
 	
-	public String addUser(CreateUserRequest request) throws Exception {
+	public Response addUser(CreateUserRequest request) throws Exception {
 		
 		User user = userRepository.findByEmail(request.getEmail()).orElse(null);
 		if(user== null) {
@@ -41,10 +43,13 @@ public class AuthService {
 		} else {
 			throw new DuplicateResourceException("Email already exists!");
 		}
-		return "User Created";
+		return Response.builder()
+				.data("User Created")
+				.httpStatus(HttpStatus.CREATED)
+				.build();
 	}
 	
-	public UserResponse signIn(LoginRequest request) {
+	public Response signIn(LoginRequest request) {
 		User user  = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new AuthenticationException("Email or Password is incorrect!"));
 		
 		if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -52,13 +57,16 @@ public class AuthService {
 		}
 		
 		String token  = jwtUtil.generateToken(user.getEmail());
-		return UserResponse.builder()
-				.id(user.getId())
-				.username(user.getUsername())
-				.email(user.getEmail())
-				.createdAt(user.getCreatedAt())
-				.updatedat(user.getUpdatedAt())
-				.token(token)
+		return Response.builder()
+				.data(UserResponse.builder()
+						.id(user.getId())
+						.username(user.getUsername())
+						.email(user.getEmail())
+						.createdAt(user.getCreatedAt())
+						.updatedat(user.getUpdatedAt())
+						.token(token)
+						.build())
+				.httpStatus(HttpStatus.ACCEPTED)
 				.build();
 				
 	}

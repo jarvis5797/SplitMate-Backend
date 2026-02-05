@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 		ErrorResponse response = errorResponseBuilder(ex, request);
 		response.setErrorCode("UNAUTHORIZED");
 		
-		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 		ErrorResponse response = errorResponseBuilder(ex, request);
 		response.setErrorCode("INVALID_USERNAME_OR_PASSWORD");
 		
-		return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	}
 	
 	
