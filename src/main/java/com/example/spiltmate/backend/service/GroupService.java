@@ -51,5 +51,20 @@ public class GroupService {
 				.httpStatus(HttpStatus.OK)
 				.build();
 	}
+	
+	public Response addMemberInGroup(Long userId, Long groupId) {
+		Group group = groupRepository.findById(groupId).orElseThrow(()-> new ResourceNotFoundException("Unable to find group!"));
+		
+		User member = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Unable to find user!"));
+		
+		group.getMembers().add(member);
+		groupRepository.save(group);
+		
+		return Response.builder()
+				.data(groupRepository.save(group))
+				.httpStatus(HttpStatus.ACCEPTED)
+				.build();
+				
+	}
 
 }

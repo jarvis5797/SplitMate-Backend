@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
 	}
 	
+	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<ErrorResponse> handleInvalidAuthentication(AuthenticationException ex , WebRequest request){
 		
 		ErrorResponse response = errorResponseBuilder(ex, request);
