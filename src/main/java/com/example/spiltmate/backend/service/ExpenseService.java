@@ -1,11 +1,16 @@
 package com.example.spiltmate.backend.service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.spiltmate.backend.dto.AddExpenseRequest;
+import com.example.spiltmate.backend.dto.ExpenseResponse;
+import com.example.spiltmate.backend.dto.ExpenseSplitResponse;
+import com.example.spiltmate.backend.dto.GroupExpenseResponse;
 import com.example.spiltmate.backend.dto.Response;
 import com.example.spiltmate.backend.dto.SplitDetail;
 import com.example.spiltmate.backend.entity.Expense;
@@ -29,7 +34,7 @@ public class ExpenseService {
 	
 	private final UserRepository userRepository;
 	
-	public Response addExpense(AddExpenseRequest request) {
+	public ExpenseResponse addExpense(AddExpenseRequest request) {
 		
 		User user = userRepository.findById(request.getPaidBy()).orElseThrow(()-> new ResourceNotFoundException("Unable to find user!"));
 		
@@ -54,18 +59,42 @@ public class ExpenseService {
 			expense.getSplits().add(split);
 		}
 		
-		return Response.builder()
-				.data(expenseRepository.save(expense))
-				.httpStatus(HttpStatus.CREATED)
+		Expense savedExpense =  expenseRepository.save(expense);
+		
+		return ExpenseResponse.builder()
+				.expenseId(savedExpense.getId())
+				.paidBy(savedExpense.getPaidBy().getId())
+				.paidByUserName(savedExpense.getPaidBy().getUsername())
+				.amount(savedExpense.getAmount())
+				.createdAt(savedExpense.getCreatedAt())
+				.updatedAt(savedExpense.getUpdatedAt())
+				.splits(savedExpense.getSplits().stream()
+						.map(split-> ExpenseSplitResponse.builder()
+								.splitId(split.getId())
+								.userId(split.getUser().getId())
+								.userName(split.getUser().getUsername())
+								.shareAmount(split.getShareAmount())
+								.createdAt(split.getCreatedAt())
+								.updatedAt(split.getUpdatedAt())
+								.build())
+						.collect(Collectors.toList()))
 				.build();
 			
 	}
 	
-	public Response getAllGroupExpense(Long groupId) {
-		return Response.builder()
-				.data(expenseRepository.findByGroupId(groupId))
-				.httpStatus(HttpStatus.OK)
-				.build();
+	public List<GroupExpenseResponse> getAllGroupExpense(Long groupId) {
+		List<Expense> expenses = expenseRepository.findByGroupId(groupId);
+		return expenses.stream()
+				.map(expense -> GroupExpenseResponse.builder()
+						.amount(expense.getAmount())
+						.expesneId(expense.getId())
+						.paidBy(expense.getPaidBy().getId())
+						.paidByUserName(expense.getPaidBy().getUsername())
+						.createdAt(expense.getCreatedAt())
+						.updatedAt(expense.getUpdatedAt())
+						.build())
+				.collect(Collectors.toList()
+			);
 	}
 
 }
