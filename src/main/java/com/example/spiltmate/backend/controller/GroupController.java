@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spiltmate.backend.dto.CreateGroupRequest;
+import com.example.spiltmate.backend.dto.Response;
 import com.example.spiltmate.backend.service.GroupService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,11 @@ public class GroupController {
 	
 	@PutMapping("/addMember")
 	public ResponseEntity<?> addMemberInGroup(@RequestParam Long userId, @RequestParam Long groupId){
-		return new ResponseEntity<>(groupService.addMemberInGroup(userId, groupId), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(Response.builder()
+				.data(groupService.addMemberInGroup(userId, groupId))
+				.httpStatus(HttpStatus.ACCEPTED)
+				.build(), 
+				HttpStatus.ACCEPTED);
 	}
 	
 

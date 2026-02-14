@@ -51,7 +51,7 @@ public class Expense {
 	private LocalDateTime createdAt;
 	
 	@UpdateTimestamp
-	private LocalDateTime updatedat;
+	private LocalDateTime updatedAt;
 	
 	@OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
 	private List<ExpenseSplit> splits = new ArrayList<>();
