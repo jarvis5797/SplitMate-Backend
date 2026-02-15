@@ -1,5 +1,6 @@
 package com.example.spiltmate.backend.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class GroupExpenseResponse {
 	
 	private String paidByUserName;
 	
-	private Double amount;
+	private BigDecimal amount;
 	
 	private LocalDateTime createdAt;
 	

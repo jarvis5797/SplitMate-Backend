@@ -1,5 +1,6 @@
 package com.example.spiltmate.backend.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,8 @@ public class Expense {
 	
 	private String description;
 	
-	@Column(nullable = false)
-	private Double amount;
+	@Column(nullable = false, precision = 15, scale = 2)
+	private BigDecimal amount;
 	
 	@ManyToOne
 	@JoinColumn(name = "paid_by")

@@ -1,5 +1,7 @@
 package com.example.spiltmate.backend.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,6 @@ public class UserBalance {
 	
 	private String userName;
 	
-	private Double balance;
+	private BigDecimal balance;
 
 }

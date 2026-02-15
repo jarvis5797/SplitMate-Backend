@@ -1,5 +1,6 @@
 package com.example.spiltmate.backend.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -10,7 +11,7 @@ public class AddExpenseRequest {
 	
 	private String description;
 	
-	private Double amount;
+	private BigDecimal amount;
 	
 	private Long paidBy;
 	
