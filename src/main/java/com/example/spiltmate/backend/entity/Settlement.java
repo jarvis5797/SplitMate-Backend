@@ -6,47 +6,52 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "expense_splits")
+@Table(
+		name = "settlements",
+		indexes = {
+				@Index(name = "idx_from_user" , columnList = "fromUserId"),
+				@Index(name = "idx_to_user", columnList = "toUserId"),
+				@Index(name = "idx_group_id", columnList = "groupId")
+			}
+		)
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ExpenseSplit {
+public class Settlement {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-	@JoinColumn(name = "expense_id")
-	private Expense expense;
+	@Column(nullable = false)
+	private Long groupId;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@Column(nullable = false)
+	private Long fromUserId;
+	
+	@Column(nullable = false)
+	private Long toUserId;
 	
 	@Column(nullable = false, precision = 15, scale = 2)
-	private BigDecimal shareAmount;
-;
+	private BigDecimal amount;
+	
+	@Column(nullable = false)
+	private boolean settled = false;
 	
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+	
 
 }

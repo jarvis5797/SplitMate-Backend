@@ -1,5 +1,6 @@
 package com.example.spiltmate.backend.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class ExpenseResponse {
 	
 	private Long expenseId;
 	
-	private Double amount;
+	private BigDecimal amount;
 	
 	private Long paidBy;
 	

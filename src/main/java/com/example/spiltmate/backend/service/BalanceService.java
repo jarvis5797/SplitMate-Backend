@@ -1,5 +1,6 @@
 package com.example.spiltmate.backend.service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,20 +32,20 @@ public class BalanceService {
 		
 		List<Expense> expenses = expenseRepository.findByGroupId(groupId);
 		
-		Map<Long, Double> balanceMap = new HashMap<>();
+		Map<Long, BigDecimal> balanceMap = new HashMap<>();
 		
-		group.getMembers().forEach(member-> balanceMap.put(member.getId(), 0.0));
+		group.getMembers().forEach(member-> balanceMap.put(member.getId(), BigDecimal.ZERO));
 		
 		expenses.forEach(expense-> {
 			balanceMap.merge(expense.getPaidBy().getId(), 
 					expense.getAmount(), 
-					Double::sum
+					BigDecimal::add
 				);
 			
 		expense.getSplits().forEach(split->
 			balanceMap.merge(split.getUser().getId(), 
-					-split.getShareAmount(), 
-					Double::sum
+					split.getShareAmount().multiply(BigDecimal.valueOf(-1)), 
+					BigDecimal::add
 					)
 				);
 			
